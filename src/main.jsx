@@ -55,17 +55,21 @@ function App() {
         <a className="wordmark" href="#top" aria-label="Shivam Dutt Sharma, home">SDS<span className="wordmark-dot">.</span></a>
         <nav aria-label="Primary navigation"><a href="#about">About</a><a href="#building">Building</a><a href="#experience">Experience</a><a href="#writing">Writing</a><a href="#contact">Contact</a></nav>
         <div className="header-actions">
-          <External className="header-social" href={urls.linkedin}>LinkedIn</External>
+          <External className="header-social" href={urls.linkedin}>
+            LinkedIn
+          </External>
+        
           <button
             type="button"
             className="theme-toggle"
             role="switch"
+            aria-checked={darkMode}
             aria-label="Dark mode"
-            aria-checked={theme === 'dark'}
-            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            onClick={() => setTheme(current => current === 'dark' ? 'light' : 'dark')}
-          ><span className="theme-toggle-knob" /></button>
-        </div>
+            onClick={() => setDarkMode(!darkMode)}
+          >
+            <span className="theme-toggle-knob" />
+          </button>
+</div>
       </header>
       <main id="top">
         <section className="hero" aria-labelledby="hero-title">
@@ -93,3 +97,16 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .header-actions {
+    gap: 12px;
+  }
+}
