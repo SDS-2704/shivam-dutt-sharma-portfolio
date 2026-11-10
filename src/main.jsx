@@ -60,15 +60,19 @@ function App() {
           </External>
         
           <button
-            type="button"
-            className="theme-toggle"
-            role="switch"
-            aria-checked={darkMode}
-            aria-label="Dark mode"
-            onClick={() => setDarkMode(!darkMode)}
-          >
-            <span className="theme-toggle-knob" />
-          </button>
+  type="button"
+  className="theme-toggle"
+  role="switch"
+  aria-checked={theme === 'dark'}
+  aria-label="Dark mode"
+  onClick={() =>
+    setTheme(current =>
+      current === 'dark' ? 'light' : 'dark'
+    )
+  }
+>
+  <span className="theme-toggle-knob" />
+</button>
 </div>
       </header>
       <main id="top">
