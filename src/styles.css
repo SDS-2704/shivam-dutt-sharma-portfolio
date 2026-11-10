@@ -848,3 +848,16 @@ h2 em {
     animation: none !important;
   }
 }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .header-actions {
+    gap: 12px;
+  }
+}
