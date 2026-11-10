@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
@@ -15,7 +15,12 @@ function Arrow({ diagonal = false }) {
 }
 
 function External({ href, children, className = '' }) {
-  return <a className={className} href={href} target={href.startsWith('mailto:') ? undefined : '_blank'} rel={href.startsWith('mailto:') ? undefined : 'noopener noreferrer'}>{children}<Arrow diagonal /></a>;
+  const isEmail = href.startsWith('mailto:');
+  return (
+    <a className={className} href={href} target={isEmail ? undefined : '_blank'} rel={isEmail ? undefined : 'noopener noreferrer'}>
+      {children}<Arrow diagonal />
+    </a>
+  );
 }
 
 const experience = [
@@ -27,13 +32,40 @@ const experience = [
   { company: 'MakeMyTrip', role: 'Product Manager', period: '2016 — 2019', detail: 'B2B products supporting more than 10,000 hotel partners.' },
 ];
 
+function getInitialTheme() {
+  try {
+    const stored = window.localStorage.getItem('portfolio-theme');
+    if (stored === 'dark' || stored === 'light') return stored;
+  } catch { /* Storage may be unavailable. */ }
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+
 function App() {
-  return <>
+  const [theme, setTheme] = useState(getInitialTheme);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+    try { window.localStorage.setItem('portfolio-theme', theme); } catch { /* Storage may be unavailable. */ }
+  }, [theme]);
+
+  return (
     <div className="site-shell">
       <header className="site-header">
         <a className="wordmark" href="#top" aria-label="Shivam Dutt Sharma, home">SDS<span className="wordmark-dot">.</span></a>
         <nav aria-label="Primary navigation"><a href="#about">About</a><a href="#building">Building</a><a href="#experience">Experience</a><a href="#writing">Writing</a><a href="#contact">Contact</a></nav>
-        <External className="header-social" href={urls.linkedin}>LinkedIn</External>
+        <div className="header-actions">
+          <External className="header-social" href={urls.linkedin}>LinkedIn</External>
+          <button
+            type="button"
+            className="theme-toggle"
+            role="switch"
+            aria-label="Dark mode"
+            aria-checked={theme === 'dark'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={() => setTheme(current => current === 'dark' ? 'light' : 'dark')}
+          ><span className="theme-toggle-knob" /></button>
+        </div>
       </header>
       <main id="top">
         <section className="hero" aria-labelledby="hero-title">
@@ -57,7 +89,7 @@ function App() {
       </main>
       <footer className="site-footer"><span>© {new Date().getFullYear()} Shivam Dutt Sharma</span><div><External href={urls.linkedin}>LinkedIn</External><External href={urls.medium}>Medium</External><External href={urls.email}>Email</External></div><a href="#top">Back to top ↑</a></footer>
     </div>
-  </>;
+  );
 }
 
 createRoot(document.getElementById('root')).render(<App />);
