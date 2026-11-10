@@ -97,16 +97,3 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-shrink: 0;
-}
-
-@media (max-width: 640px) {
-  .header-actions {
-    gap: 12px;
-  }
-}
